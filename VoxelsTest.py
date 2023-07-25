@@ -12,7 +12,7 @@ import pygame.gfxdraw
 # (left, right, up, down)
 # 1 - Toggles between interpolating the midway points or not.
 # 2 - Makes it so that the values for the blocks that are solid are flipped to negative.
-# 3 - Anti-aliasing? idk, pygame is weird.
+# 3 - Anti-aliasing? I don't know, pygame is weird.
 # 4 - Toggle the drawing of points in world space of each voxel.
 # 5 - Toggles the display of value numbers for each block.
 # Mouse Button Left/Right - sets the block at the clicked location to air/solid
@@ -27,31 +27,31 @@ class Voxel:
         self.Y = y
 
 
-EdgePairs = [[0, 1], #0
-             [1, 0], #1
-             [0, 3], #2
-             [3, 0], #3
-             [1, 2], #4
-             [2, 1], #5
-             [3, 2], #6
-             [2, 3]  #7
+EdgePairs = [[0, 1],  # 0
+             [1, 0],  # 1
+             [0, 3],  # 2
+             [3, 0],  # 3
+             [1, 2],  # 4
+             [2, 1],  # 5
+             [3, 2],  # 6
+             [2, 3]   # 7
              ]
-CornerCombinations = [[-1, -1, -1, -1],   #0
-                      [0, 2, -1, -1],     #1
-                      [1, 4, -1, -1],     #2
-                      [2, 4, -1, -1],     #3
-                      [7, 5, -1, -1],     #4
-                      [0, 2, 7, 5],       #5
-                      [1, 7, -1, -1],     #6
-                      [2, 7, -1, -1],     #7
-                      [3, 6, -1, -1],     #8
-                      [6, 0, -1, -1],     #9
-                      [3, 1, 6, 4],       #10
-                      [6, 4, -1, -1],     #11
-                      [3, 5, -1, -1],     #12
-                      [0, 5, -1, -1],     #13
-                      [3, 1, -1, -1],     #14
-                      [-1, -1, -1, -1]    #15
+CornerCombinations = [[-1, -1, -1, -1],   # 0
+                      [0, 2, -1, -1],     # 1
+                      [1, 4, -1, -1],     # 2
+                      [2, 4, -1, -1],     # 3
+                      [7, 5, -1, -1],     # 4
+                      [0, 2, 7, 5],       # 5
+                      [1, 7, -1, -1],     # 6
+                      [2, 7, -1, -1],     # 7
+                      [3, 6, -1, -1],     # 8
+                      [6, 0, -1, -1],     # 9
+                      [3, 1, 6, 4],       # 10
+                      [6, 4, -1, -1],     # 11
+                      [3, 5, -1, -1],     # 12
+                      [0, 5, -1, -1],     # 13
+                      [3, 1, -1, -1],     # 14
+                      [-1, -1, -1, -1]    # 15
                       ]
 
 
@@ -127,25 +127,25 @@ def clamp(value: float, minimum: float, maximum: float) -> float:
 
 # Calculates the value of the current block that'll be used in the interpolation.
 def calculate_value(x: int, y: int) -> float:
-    summ = 0.0
-    summ: float
+    aggregate = 0.0
+    aggregate: float
     count = 0
     count: int
 
     if CheaperCalculation:
         count = 5
-        summ += int(get_voxel(x - 1, y).Solidity)
-        summ += int(get_voxel(x + 1, y).Solidity)
-        summ += int(get_voxel(x, y - 1).Solidity)
-        summ += int(get_voxel(x, y + 1).Solidity)
-        summ += int(get_voxel(x, y).Solidity)
+        aggregate += int(get_voxel(x - 1, y).Solidity)
+        aggregate += int(get_voxel(x + 1, y).Solidity)
+        aggregate += int(get_voxel(x, y - 1).Solidity)
+        aggregate += int(get_voxel(x, y + 1).Solidity)
+        aggregate += int(get_voxel(x, y).Solidity)
     else:
         for dx in range(x - 1, x + 2):
             for dy in range(y - 1, y + 2):
-                summ += int(get_voxel(dx, dy).Solidity)
+                aggregate += int(get_voxel(dx, dy).Solidity)
                 count += 1
 
-    value = float(summ) / float(count)
+    value = float(aggregate) / float(count)
 
     if Invert:
         value = value if not get_voxel(x, y).Solidity else -value
